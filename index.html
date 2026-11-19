@@ -2003,9 +2003,9 @@
               <div class="model-select-wrapper">
                 <label for="modelSelect" style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Model:</label>
                 <select class="model-dropdown-select" id="modelSelect">
-                  <option value="nexora-hermes-8b" selected>Nexora Hermes-8B (Groq Llama 3.1 8B Instant — Default)</option>
+                  <option value="nexora-hermes-8b">Nexora Hermes-8B (Groq Llama 3.1 8B Instant)</option>
                   <option value="nexora-titan-120b">Nexora Titan-120B (Groq GPT-OSS 120B)</option>
-                  <option value="nexora-quantum-20b">Nexora Quantum-20B (Groq GPT-OSS 20B)</option>
+                  <option value="nexora-quantum-20b" selected>Nexora Quantum-20B (Groq GPT-OSS 20B — Default)</option>
                   <option value="nexora-chronos-27b">Nexora Chronos-27B (Groq Qwen 3.8 27B)</option>
                   <option value="nexora-aegis-guard">Nexora Aegis-Guard (Groq Llama Guard 3 8B)</option>
                 </select>
@@ -2652,7 +2652,7 @@
 
     // Global Interactive State
     const AppState = {
-      currentModel: "nexora-hermes-8b",
+      currentModel: "nexora-quantum-20b",
       executionMode: "groq", // "groq" | "simulation"
       isGenerating: false,
       abortRequested: false,
@@ -2727,7 +2727,7 @@
     // WHAT THIS DOES:
     // Synchronizes the model selection dropdown with specifications and visual badge details.
     function updateModelSpecs(modelId) {
-      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-hermes-8b"];
+      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-quantum-20b"];
       AppState.currentModel = model.id;
       $("specArchitecture").textContent = model.architecture;
       $("specContext").textContent = model.context;
@@ -2925,7 +2925,7 @@
     // Fallback simulation generator preserved for offline mode and testing without an active API key.
     function generateSimulatedResponse(prompt, systemPrompt, modelId, temperature) {
       const lower = prompt.toLowerCase();
-      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-titan-70b"];
+      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-quantum-20b"];
 
       if (lower.includes("architecture") || lower.includes("pipeline") || lower.includes("distributed") || lower.includes("ingestion") || lower.includes("queue")) {
         return `# Distributed Event Ingestion Pipeline Architecture
@@ -3189,7 +3189,7 @@ This approach balances computational efficiency with operational clarity, matchi
     // WHAT THIS DOES:
     // Runs client-side simulated streaming generation as fallback or offline demo.
     async function runSimulatedStreaming(userPrompt, systemPrompt, modelId, temperature, inputTokens, startTime) {
-      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-titan-70b"];
+      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-quantum-20b"];
       const fullResponseText = generateSimulatedResponse(userPrompt, systemPrompt, modelId, temperature);
       const targetOutputTokens = estimateTokens(fullResponseText);
       const usage = {
@@ -3235,7 +3235,7 @@ This approach balances computational efficiency with operational clarity, matchi
       badge.style.borderColor = "var(--antique-gold)";
 
       const modelId = $("modelSelect").value;
-      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-titan-70b"];
+      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-quantum-20b"];
       const temperature = parseFloat($("tempRange").value).toFixed(2);
       const maxTokens = parseInt($("maxTokensRange").value, 10);
       const topP = parseFloat($("topPRange").value).toFixed(2);
@@ -3720,7 +3720,7 @@ This approach balances computational efficiency with operational clarity, matchi
       });
 
       // Initial Model Specs Render
-      updateModelSpecs("nexora-titan-70b");
+      updateModelSpecs("nexora-quantum-20b");
     });
   </script>
 </body>

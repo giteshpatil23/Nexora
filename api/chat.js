@@ -4,33 +4,24 @@
 // exclusively from process.env and strictly isolating it from the frontend client.
 
 // WHAT THIS DOES:
-// Maps NEXORA UI model identifiers to active production Groq model IDs.
-// Verified against official Groq documentation (console.groq.com/docs/models).
+// Maps NEXORA UI model identifiers to active Groq model IDs.
+// Only model IDs present in this map are accepted.
+// Unknown IDs are rejected with a clear UNSUPPORTED_MODEL error — no arbitrary pass-through.
 const GROQ_MODEL_MAP = {
-  // Primary Active Production Models
-  "nexora-hermes-8b": "llama-3.1-8b-instant",
-  "nexora-titan-120b": "openai/gpt-oss-120b",
-  "nexora-quantum-20b": "openai/gpt-oss-20b",
-  "nexora-chronos-27b": "qwen/qwen3.8-27b",
-  "nexora-aegis-guard": "llama-guard-3-8b",
-
-  // Direct Groq Model IDs (passed directly through)
-  "llama-3.1-8b-instant": "llama-3.1-8b-instant",
-  "openai/gpt-oss-120b": "openai/gpt-oss-120b",
-  "openai/gpt-oss-20b": "openai/gpt-oss-20b",
-  "qwen/qwen3.8-27b": "qwen/qwen3.8-27b",
-  "qwen/qwen3.6-27b": "qwen/qwen3.6-27b",
-  "llama-guard-3-8b": "llama-guard-3-8b",
-
-  // Legacy aliases gracefully mapped to supported production equivalents
-  "nexora-titan-70b": "llama-3.1-8b-instant",
-  "nexora-chronos-coder": "llama-3.1-8b-instant",
-  "nexora-quantum-moe": "openai/gpt-oss-20b"
+  // NEXORA UI alias          -> Groq model ID
+  "nexora-hermes-8b":          "llama-3.1-8b-instant",
+  "nexora-titan-120b":         "openai/gpt-oss-120b",
+  "nexora-quantum-20b":        "openai/gpt-oss-20b",   // DEFAULT
+  "nexora-chronos-27b":        "qwen/qwen3.8-27b",
+  "nexora-aegis-guard":        "llama-guard-3-8b"
+  // Legacy aliases removed. Sending a legacy ID returns UNSUPPORTED_MODEL.
+  // Raw Groq model IDs are no longer passed through directly.
 };
 
 // WHAT THIS DOES:
-// The verified, universally supported default Groq model for chat completion.
-const DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant";
+// Default Groq model — openai/gpt-oss-20b, explicitly confirmed working by Groq.
+// Used when the frontend sends no model identifier.
+const DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b";
 
 // WHAT THIS DOES:
 // Helper to safely parse incoming JSON request body from standard Node or Vercel HTTP requests.
@@ -132,14 +123,21 @@ module.exports = async function handler(req, res) {
   }
 
   // WHAT THIS DOES:
-  // Resolves the requested model without silently overriding valid direct model IDs.
-  // If model is a NEXORA alias in GROQ_MODEL_MAP, resolve it.
-  // If model is a custom/direct string, pass it directly to Groq.
-  // If model is empty or unspecified, fall back to DEFAULT_GROQ_MODEL.
+  // Resolves the NEXORA model alias to a Groq model ID via GROQ_MODEL_MAP.
+  // If no model is provided, falls back to DEFAULT_GROQ_MODEL (openai/gpt-oss-20b).
+  // If the model ID is NOT in GROQ_MODEL_MAP, the request is rejected — no arbitrary
+  // raw pass-through to Groq is permitted.
   let resolvedModel = DEFAULT_GROQ_MODEL;
   if (model && typeof model === "string" && model.trim()) {
     const trimmed = model.trim();
-    resolvedModel = GROQ_MODEL_MAP[trimmed] || trimmed;
+    if (!Object.prototype.hasOwnProperty.call(GROQ_MODEL_MAP, trimmed)) {
+      return res.status(400).json({
+        success: false,
+        code: "UNSUPPORTED_MODEL",
+        error: `The model '${trimmed}' is not supported. Use one of: ${Object.keys(GROQ_MODEL_MAP).join(", ")}.`
+      });
+    }
+    resolvedModel = GROQ_MODEL_MAP[trimmed];
   }
 
   // WHAT THIS DOES:
