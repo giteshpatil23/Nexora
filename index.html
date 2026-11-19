@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXORA — The Intelligence Playground</title>
-  <meta name="description" content="Explore. Configure. Generate. An advanced AI experimentation playground with Groq Cloud LPU acceleration.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><polygon points=%2250,5 95,28 95,72 50,95 5,72 5,28%22 fill=%22%23101612%22 stroke=%22%23C5A45B%22 stroke-width=%224%22/><path d=%22M32 68 L32 32 L68 68 L68 32%22 fill=%22none%22 stroke=%22%23176B45%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><circle cx=%2250%22 cy=%2250%22 r=%226%22 fill=%22%234D8FE8%22/></svg>">
+  <meta name="description"
+    content="Explore. Configure. Generate. An advanced AI experimentation playground with Groq Cloud LPU acceleration.">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><polygon points=%2250,5 95,28 95,72 50,95 5,72 5,28%22 fill=%22%23101612%22 stroke=%22%23C5A45B%22 stroke-width=%224%22/><path d=%22M32 68 L32 32 L68 68 L68 32%22 fill=%22none%22 stroke=%22%23176B45%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><circle cx=%2250%22 cy=%2250%22 r=%226%22 fill=%22%234D8FE8%22/></svg>">
 
   <style>
     /* ==========================================================================
@@ -75,13 +78,16 @@
     }
 
     /* Base Reset & Document Defaults */
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       width: 100%;
       background-color: var(--bg-main);
@@ -121,13 +127,16 @@
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: var(--bg-main);
     }
+
     ::-webkit-scrollbar-thumb {
       background: var(--border-color);
       border-radius: var(--radius-pill);
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--mystic-green);
     }
@@ -139,7 +148,10 @@
     }
 
     /* Utility Helpers */
-    .mono { font-family: var(--font-mono); }
+    .mono {
+      font-family: var(--font-mono);
+    }
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -151,16 +163,19 @@
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
+
     .badge-demo {
       background: var(--antique-gold-subtle);
       color: var(--antique-gold);
       border: 1px solid rgba(197, 164, 91, 0.3);
     }
+
     .badge-simulated {
       background: rgba(40, 122, 85, 0.2);
       color: #6DE0A3;
       border: 1px solid rgba(40, 122, 85, 0.4);
     }
+
     .badge-electric {
       background: var(--electric-blue-subtle);
       color: var(--electric-blue);
@@ -172,6 +187,7 @@
       position: relative;
       cursor: help;
     }
+
     .has-tooltip::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -197,6 +213,7 @@
       line-height: 1.4;
       font-weight: normal;
     }
+
     .has-tooltip:hover::after {
       opacity: 1;
       visibility: visible;
@@ -248,6 +265,7 @@
       justify-content: center;
       transition: background var(--transition-fast);
     }
+
     .mobile-menu-btn:hover {
       background: var(--bg-hover);
     }
@@ -316,6 +334,7 @@
       border-radius: 50%;
       position: relative;
     }
+
     .pulse-dot::after {
       content: "";
       position: absolute;
@@ -330,8 +349,15 @@
     }
 
     @keyframes pulseGlow {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(2.2); opacity: 0; }
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
     }
 
     .header-right {
@@ -353,6 +379,7 @@
       cursor: pointer;
       transition: all var(--transition-fast);
     }
+
     .toggle-config-btn:hover {
       background: var(--bg-hover);
       border-color: var(--antique-gold);
@@ -404,6 +431,7 @@
       white-space: nowrap;
       transition: opacity var(--transition-fast);
     }
+
     .sidebar.collapsed .nav-label {
       opacity: 0;
       pointer-events: none;
@@ -465,6 +493,7 @@
       white-space: nowrap;
       transition: opacity var(--transition-fast);
     }
+
     .sidebar.collapsed .nav-text {
       display: none;
     }
@@ -493,6 +522,7 @@
       transition: all var(--transition-fast);
       width: 100%;
     }
+
     .collapse-sidebar-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
@@ -507,6 +537,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .sidebar.collapsed .sidebar-meta-info {
       display: none;
     }
@@ -617,6 +648,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       transition: border-color var(--transition-fast);
     }
+
     .model-selector-card:focus-within {
       border-color: var(--border-highlight);
     }
@@ -656,9 +688,11 @@
       background-position: right 14px center;
       padding-right: 36px;
     }
+
     .model-dropdown-select:hover {
       border-color: var(--antique-gold);
     }
+
     .model-dropdown-select:focus {
       border-color: var(--primary-emerald);
       box-shadow: 0 0 0 2px var(--emerald-glow);
@@ -705,6 +739,7 @@
       padding: 4px 0;
       scrollbar-width: none;
     }
+
     .presets-bar::-webkit-scrollbar {
       display: none;
     }
@@ -732,6 +767,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .preset-pill:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
@@ -749,6 +785,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       transition: border-color var(--transition-fast);
     }
+
     .editor-card:focus-within {
       border-color: var(--border-highlight);
     }
@@ -801,6 +838,7 @@
       gap: 5px;
       transition: all var(--transition-fast);
     }
+
     .icon-action-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
@@ -821,6 +859,7 @@
       resize: vertical;
       outline: none;
     }
+
     .system-prompt-textarea::placeholder {
       color: var(--text-muted);
     }
@@ -839,6 +878,7 @@
       resize: vertical;
       outline: none;
     }
+
     .user-prompt-textarea::placeholder {
       color: var(--text-muted);
     }
@@ -923,6 +963,7 @@
       cursor: pointer;
       transition: all var(--transition-fast);
     }
+
     .stop-btn:hover {
       background: rgba(230, 85, 85, 0.3);
       border-color: #FF5555;
@@ -941,6 +982,7 @@
       cursor: pointer;
       transition: all var(--transition-fast);
     }
+
     .clear-all-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
@@ -954,6 +996,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .kbd-key {
       background: var(--bg-input);
       border: 1px solid var(--border-color);
@@ -1020,11 +1063,13 @@
       cursor: pointer;
       transition: all var(--transition-fast);
     }
+
     .copy-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
       border-color: var(--antique-gold);
     }
+
     .copy-btn.copied {
       background: rgba(40, 122, 85, 0.25);
       border-color: var(--primary-emerald);
@@ -1086,26 +1131,44 @@
     .formatted-response {
       word-break: break-word;
     }
-    .formatted-response h1, 
-    .formatted-response h2, 
+
+    .formatted-response h1,
+    .formatted-response h2,
     .formatted-response h3 {
       color: var(--antique-gold);
       margin: 18px 0 10px 0;
       font-weight: 700;
       letter-spacing: -0.2px;
     }
-    .formatted-response h1 { font-size: 18px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px; }
-    .formatted-response h2 { font-size: 16px; }
-    .formatted-response h3 { font-size: 14px; color: var(--electric-blue); }
+
+    .formatted-response h1 {
+      font-size: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 6px;
+    }
+
+    .formatted-response h2 {
+      font-size: 16px;
+    }
+
+    .formatted-response h3 {
+      font-size: 14px;
+      color: var(--electric-blue);
+    }
+
     .formatted-response p {
       margin-bottom: 14px;
     }
-    .formatted-response ul, .formatted-response ol {
+
+    .formatted-response ul,
+    .formatted-response ol {
       margin: 0 0 16px 24px;
     }
+
     .formatted-response li {
       margin-bottom: 6px;
     }
+
     .formatted-response code.inline-code {
       font-family: var(--font-mono);
       background: rgba(23, 42, 70, 0.4);
@@ -1115,6 +1178,7 @@
       border-radius: 4px;
       font-size: 12.5px;
     }
+
     .formatted-response pre {
       background: #090E0B;
       border: 1px solid var(--border-color);
@@ -1128,10 +1192,12 @@
       color: #A0D3B8;
       box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
     }
+
     .formatted-response strong {
       color: #FFFFFF;
       font-weight: 600;
     }
+
     .formatted-response blockquote {
       border-left: 3px solid var(--antique-gold);
       padding-left: 14px;
@@ -1151,9 +1217,17 @@
       animation: cursorBlink 0.9s infinite ease-in-out;
       box-shadow: 0 0 8px var(--antique-gold);
     }
+
     @keyframes cursorBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
     }
 
     /* Response Metrics Bar (Technical Monospace Bar) */
@@ -1193,9 +1267,11 @@
       color: var(--metallic-silver);
       font-weight: 600;
     }
+
     .metric-value.highlight {
       color: var(--antique-gold);
     }
+
     .metric-value.speed {
       color: #6DE0A3;
     }
@@ -1264,6 +1340,7 @@
       justify-content: center;
       transition: color var(--transition-fast);
     }
+
     .config-close-btn:hover {
       color: var(--text-primary);
     }
@@ -1325,6 +1402,7 @@
       position: relative;
       transition: background var(--transition-fast);
     }
+
     .range-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -1337,14 +1415,17 @@
       cursor: grab;
       transition: transform var(--transition-fast), background var(--transition-fast);
     }
+
     .range-slider::-webkit-slider-thumb:hover {
       transform: scale(1.2);
       background: var(--antique-gold-hover);
     }
+
     .range-slider::-webkit-slider-thumb:active {
       cursor: grabbing;
       transform: scale(1.1);
     }
+
     .range-slider::-moz-range-thumb {
       width: 16px;
       height: 16px;
@@ -1378,6 +1459,7 @@
       text-align: center;
       transition: border-color var(--transition-fast);
     }
+
     .number-stepper-input:focus {
       border-color: var(--primary-emerald);
       box-shadow: 0 0 0 2px var(--emerald-glow);
@@ -1405,6 +1487,7 @@
       cursor: pointer;
       transition: background var(--transition-fast);
     }
+
     .accordion-toggle:hover {
       background: var(--bg-hover);
     }
@@ -1416,6 +1499,7 @@
       gap: 14px;
       border-top: 1px solid var(--border-subtle);
     }
+
     .accordion-content.hidden {
       display: none;
     }
@@ -1430,6 +1514,7 @@
       font-size: 12.5px;
       outline: none;
     }
+
     .text-input-field:focus {
       border-color: var(--primary-emerald);
     }
@@ -1448,20 +1533,26 @@
       width: 38px;
       height: 20px;
     }
+
     .switch-label input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+
     .switch-slider {
       position: absolute;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-color: #19231D;
       border: 1px solid var(--border-color);
       border-radius: 20px;
       transition: var(--transition-fast);
     }
+
     .switch-slider:before {
       position: absolute;
       content: "";
@@ -1473,11 +1564,13 @@
       border-radius: 50%;
       transition: var(--transition-fast);
     }
-    input:checked + .switch-slider {
+
+    input:checked+.switch-slider {
       background-color: var(--primary-emerald);
       border-color: var(--primary-emerald);
     }
-    input:checked + .switch-slider:before {
+
+    input:checked+.switch-slider:before {
       transform: translateX(18px);
       background-color: #FFFFFF;
     }
@@ -1498,6 +1591,7 @@
       transition: all var(--transition-fast);
       margin-top: 6px;
     }
+
     .reset-config-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
@@ -1510,7 +1604,10 @@
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: rgba(4, 7, 5, 0.85);
       backdrop-filter: blur(8px);
       z-index: 1000;
@@ -1518,6 +1615,7 @@
       justify-content: center;
       padding: 20px;
     }
+
     .modal-overlay.active {
       display: flex;
     }
@@ -1537,8 +1635,15 @@
     }
 
     @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.96) translateY(8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .modal-header {
@@ -1574,6 +1679,7 @@
       justify-content: center;
       transition: color var(--transition-fast);
     }
+
     .modal-close-btn:hover {
       color: var(--text-primary);
     }
@@ -1597,24 +1703,29 @@
       gap: 10px;
       transition: border-color var(--transition-fast);
     }
+
     .model-spec-card:hover {
       border-color: var(--antique-gold);
     }
+
     .model-spec-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
+
     .model-spec-name {
       font-size: 15px;
       font-weight: 700;
       color: var(--text-primary);
     }
+
     .model-spec-desc {
       font-size: 12.5px;
       color: var(--text-secondary);
       line-height: 1.4;
     }
+
     .model-spec-meta {
       display: flex;
       gap: 16px;
@@ -1624,6 +1735,7 @@
       padding-top: 8px;
       border-top: 1px solid var(--border-subtle);
     }
+
     .select-model-action-btn {
       background: var(--deep-emerald);
       border: 1px solid var(--primary-emerald);
@@ -1635,6 +1747,7 @@
       cursor: pointer;
       transition: all var(--transition-fast);
     }
+
     .select-model-action-btn:hover {
       background: var(--primary-emerald);
     }
@@ -1649,11 +1762,13 @@
       flex-direction: column;
       gap: 8px;
     }
+
     .history-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
+
     .history-prompt-preview {
       font-size: 13px;
       color: var(--text-primary);
@@ -1662,6 +1777,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
     .history-actions {
       display: flex;
       gap: 8px;
@@ -1673,6 +1789,7 @@
       grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 12px;
     }
+
     .kpi-card {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
@@ -1683,11 +1800,13 @@
       gap: 4px;
       text-align: center;
     }
+
     .kpi-value {
       font-size: 22px;
       font-weight: 800;
       color: var(--antique-gold);
     }
+
     .kpi-title {
       font-size: 11px;
       color: var(--text-muted);
@@ -1706,6 +1825,7 @@
       gap: 10px;
       pointer-events: none;
     }
+
     .toast {
       background: #0E1611;
       border: 1px solid var(--border-highlight);
@@ -1720,12 +1840,29 @@
       animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: auto;
     }
-    .toast.success { border-color: var(--primary-emerald); }
-    .toast.gold { border-color: var(--antique-gold); }
-    .toast.error { border-color: var(--error-color); }
+
+    .toast.success {
+      border-color: var(--primary-emerald);
+    }
+
+    .toast.gold {
+      border-color: var(--antique-gold);
+    }
+
+    .toast.error {
+      border-color: var(--error-color);
+    }
+
     @keyframes toastIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ==========================================================================
@@ -1735,6 +1872,7 @@
       :root {
         --config-panel-width: 290px;
       }
+
       .playground-main {
         padding: 20px 24px 36px 24px;
       }
@@ -1744,6 +1882,7 @@
       .mobile-menu-btn {
         display: flex;
       }
+
       .sidebar {
         position: fixed;
         top: 0;
@@ -1755,24 +1894,31 @@
         transform: translateX(0);
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
       }
+
       .sidebar.open {
         transform: translateX(280px);
       }
+
       .sidebar.collapsed {
         width: 260px !important;
       }
+
       .sidebar.collapsed .nav-text {
         display: inline;
       }
+
       .sidebar.collapsed .nav-label {
         opacity: 1;
       }
+
       .sidebar.collapsed .sidebar-meta-info {
         display: block;
       }
+
       .mobile-backdrop.active {
         display: block;
       }
+
       .config-panel {
         position: fixed;
         top: var(--header-height);
@@ -1783,6 +1929,7 @@
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
         transition: transform var(--transition-normal);
       }
+
       .config-panel.open {
         transform: translateX(-340px);
       }
@@ -1792,35 +1939,44 @@
       .playground-main {
         padding: 14px 14px 28px 14px;
       }
+
       .playground-heading {
         font-size: 20px;
       }
+
       .execute-btn {
         width: 100%;
         padding: 13px 20px;
       }
+
       .action-group-left {
         width: 100%;
       }
+
       .metrics-bar {
         flex-direction: column;
         align-items: flex-start;
       }
+
       .metrics-group {
         gap: 12px;
       }
+
       .model-specs-grid {
         grid-template-columns: 1fr 1fr;
       }
+
       .brand-subtitle {
         display: none;
       }
+
       .system-status-indicator {
         display: none;
       }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Toast Notification Container -->
@@ -1847,14 +2003,17 @@
           <!-- Original NEXORA Tech Crest SVG -->
           <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Hexagonal Metallic Boundary -->
-            <polygon points="50,4 94,28 94,72 50,96 6,72 6,28" fill="#101612" stroke="#C5A45B" stroke-width="3"/>
+            <polygon points="50,4 94,28 94,72 50,96 6,72 6,28" fill="#101612" stroke="#C5A45B" stroke-width="3" />
             <!-- Inner Emerald Conduit Ring -->
-            <polygon points="50,14 84,33 84,67 50,86 16,67 16,33" fill="none" stroke="#176B45" stroke-width="2" stroke-dasharray="4 2"/>
+            <polygon points="50,14 84,33 84,67 50,86 16,67 16,33" fill="none" stroke="#176B45" stroke-width="2"
+              stroke-dasharray="4 2" />
             <!-- Nexus N Glyphs -->
-            <path d="M30 68 V32 L70 68 V32" stroke="#E8E9E2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M30 68 V32 L70 68 V32" stroke="#4D8FE8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M30 68 V32 L70 68 V32" stroke="#E8E9E2" stroke-width="7" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M30 68 V32 L70 68 V32" stroke="#4D8FE8" stroke-width="3" stroke-linecap="round"
+              stroke-linejoin="round" />
             <!-- Center Electric Fusion Core -->
-            <circle cx="50" cy="50" r="5" fill="#C5A45B"/>
+            <circle cx="50" cy="50" r="5" fill="#C5A45B" />
           </svg>
           <div class="brand-text-block">
             <span class="brand-title">NEXORA</span>
@@ -1875,7 +2034,9 @@
         <button class="toggle-config-btn" id="toggleConfigBtn" title="Toggle Configuration Panel">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
           </svg>
           <span>Parameters</span>
         </button>
@@ -1940,7 +2101,9 @@
             <div class="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                </path>
               </svg>
             </div>
             <span class="nav-text">Settings</span>
@@ -1978,20 +2141,24 @@
               </div>
             </div>
             <p class="hero-tagline">
-              Explore. Configure. Generate. Powered securely by Groq Cloud LPU inference via serverless endpoint <code>/api/chat</code>.
+              Explore. Configure. Generate. Powered securely by Groq Cloud LPU inference via serverless endpoint
+              <code>/api/chat</code>.
             </p>
           </div>
 
           <!-- Groq Cloud Backend Banner -->
           <div class="demo-notice-banner" id="engineNoticeBanner">
             <div class="demo-notice-content">
-              <svg class="demo-notice-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="demo-notice-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="12" y1="8" x2="12" y2="12"></line>
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
               </svg>
               <span id="engineNoticeText">
-                <strong>Groq API Integration:</strong> Connected to secure serverless endpoint <code>/api/chat</code>. Reads <code>GROQ_API_KEY</code> from <code>.env.local</code>. Client-side simulation fallback is preserved.
+                <strong>Groq API Integration:</strong> Connected to secure serverless endpoint <code>/api/chat</code>.
+                Reads <code>GROQ_API_KEY</code> from <code>.env.local</code>. Client-side simulation fallback is
+                preserved.
               </span>
             </div>
             <span class="badge badge-electric" id="bannerBadge">Groq Cloud</span>
@@ -2001,7 +2168,8 @@
           <div class="model-selector-card">
             <div class="model-card-header">
               <div class="model-select-wrapper">
-                <label for="modelSelect" style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Model:</label>
+                <label for="modelSelect"
+                  style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Model:</label>
                 <select class="model-dropdown-select" id="modelSelect">
                   <option value="nexora-hermes-8b">Nexora Hermes-8B (Groq Llama 3.1 8B Instant)</option>
                   <option value="nexora-titan-120b">Nexora Titan-120B (Groq GPT-OSS 120B)</option>
@@ -2035,7 +2203,8 @@
               </div>
               <div class="model-spec-pill">
                 <span class="spec-label">Inference Engine</span>
-                <span class="spec-val" id="specInferenceMode" style="color: var(--antique-gold);">Groq (llama-3.1-8b-instant)</span>
+                <span class="spec-val" id="specInferenceMode" style="color: var(--antique-gold);">Groq
+                  (llama-3.1-8b-instant)</span>
               </div>
             </div>
           </div>
@@ -2061,12 +2230,9 @@
                 <button class="icon-action-btn" id="clearSystemPromptBtn" title="Clear system prompt">Clear</button>
               </div>
             </div>
-            <textarea 
-              class="system-prompt-textarea" 
-              id="systemPromptInput" 
+            <textarea class="system-prompt-textarea" id="systemPromptInput"
               placeholder="You are NEXORA, a distinguished AI systems architect with razor-sharp precision, analytical depth, and an unwavering commitment to clarity."
-              spellcheck="false"
-            >You are NEXORA, a distinguished AI systems architect with razor-sharp precision, analytical depth, and an unwavering commitment to clarity.</textarea>
+              spellcheck="false">You are NEXORA, a distinguished AI systems architect with razor-sharp precision, analytical depth, and an unwavering commitment to clarity.</textarea>
             <div class="editor-footer">
               <span id="systemCharCount">130 characters</span>
               <span>Guidance: Sets the overarching persona and tone sent to Groq.</span>
@@ -2084,15 +2250,13 @@
                 <button class="icon-action-btn" id="clearUserPromptBtn" title="Clear user prompt">Clear</button>
               </div>
             </div>
-            <textarea 
-              class="user-prompt-textarea" 
-              id="userPromptInput" 
+            <textarea class="user-prompt-textarea" id="userPromptInput"
               placeholder="Design an ultra-high-throughput, distributed event ingestion pipeline. Detail the queue mechanics, backpressure mitigation, and state persistence architecture."
-              spellcheck="false"
-            >Design an ultra-high-throughput, distributed event ingestion pipeline. Detail the queue mechanics, backpressure mitigation, and state persistence architecture.</textarea>
+              spellcheck="false">Design an ultra-high-throughput, distributed event ingestion pipeline. Detail the queue mechanics, backpressure mitigation, and state persistence architecture.</textarea>
             <div class="editor-footer">
               <span id="userCharCount">155 characters (~39 input tokens est.)</span>
-              <span id="validationWarning" style="color: var(--error-color); display: none;">* User prompt cannot be empty.</span>
+              <span id="validationWarning" style="color: var(--error-color); display: none;">* User prompt cannot be
+                empty.</span>
             </div>
           </div>
 
@@ -2120,7 +2284,8 @@
               </button>
             </div>
             <div class="keyboard-shortcut-hint">
-              <span>Streaming: <strong style="color: var(--antique-gold);" id="streamingStatusLabel">Enabled</strong></span>
+              <span>Streaming: <strong style="color: var(--antique-gold);"
+                  id="streamingStatusLabel">Enabled</strong></span>
             </div>
           </div>
 
@@ -2129,7 +2294,8 @@
             <div class="output-header">
               <div class="output-status-group">
                 <span class="output-title">Model Response</span>
-                <span class="badge" id="responseStatusBadge" style="background: rgba(87, 101, 91, 0.25); color: var(--text-secondary); border: 1px solid var(--border-color);">
+                <span class="badge" id="responseStatusBadge"
+                  style="background: rgba(87, 101, 91, 0.25); color: var(--text-secondary); border: 1px solid var(--border-color);">
                   IDLE
                 </span>
               </div>
@@ -2164,7 +2330,8 @@
                 </div>
                 <div class="empty-title">Ready for Execution</div>
                 <div class="empty-desc">
-                  Select your model, customize parameters, and execute. Real-time Groq Cloud completions and telemetry metrics will appear here.
+                  Select your model, customize parameters, and execute. Real-time Groq Cloud completions and telemetry
+                  metrics will appear here.
                 </div>
               </div>
 
@@ -2237,7 +2404,8 @@
           <!-- Temperature Slider -->
           <div class="param-control-group">
             <div class="param-header">
-              <div class="param-label-box has-tooltip" data-tooltip="Controls randomness: Lower values result in deterministic, focused output. Higher values foster creative and diverse formulations.">
+              <div class="param-label-box has-tooltip"
+                data-tooltip="Controls randomness: Lower values result in deterministic, focused output. Higher values foster creative and diverse formulations.">
                 <span class="param-label">Temperature</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -2258,7 +2426,8 @@
           <!-- Max Tokens Input & Slider -->
           <div class="param-control-group">
             <div class="param-header">
-              <div class="param-label-box has-tooltip" data-tooltip="The maximum ceiling of tokens to generate in a single completion run (sent to Groq max_tokens).">
+              <div class="param-label-box has-tooltip"
+                data-tooltip="The maximum ceiling of tokens to generate in a single completion run (sent to Groq max_tokens).">
                 <span class="param-label">Max Tokens</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -2266,7 +2435,8 @@
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
               </div>
-              <input type="number" class="number-stepper-input" id="maxTokensNumber" min="16" max="4096" step="64" value="1024">
+              <input type="number" class="number-stepper-input" id="maxTokensNumber" min="16" max="4096" step="64"
+                value="1024">
             </div>
             <input type="range" class="range-slider" id="maxTokensRange" min="16" max="4096" step="64" value="1024">
             <div class="param-scale-markers">
@@ -2279,7 +2449,8 @@
           <!-- Top-P Slider -->
           <div class="param-control-group">
             <div class="param-header">
-              <div class="param-label-box has-tooltip" data-tooltip="Nucleus sampling: The model considers only the tokens comprising the top-p probability mass. E.g. 0.9 considers the top 90%.">
+              <div class="param-label-box has-tooltip"
+                data-tooltip="Nucleus sampling: The model considers only the tokens comprising the top-p probability mass. E.g. 0.9 considers the top 90%.">
                 <span class="param-label">Top P</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -2300,7 +2471,8 @@
           <!-- Frequency Penalty -->
           <div class="param-control-group">
             <div class="param-header">
-              <div class="param-label-box has-tooltip" data-tooltip="Positive values penalize tokens according to their frequency in the text so far, reducing word-for-word repetition.">
+              <div class="param-label-box has-tooltip"
+                data-tooltip="Positive values penalize tokens according to their frequency in the text so far, reducing word-for-word repetition.">
                 <span class="param-label">Frequency Penalty</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -2321,7 +2493,8 @@
           <!-- Presence Penalty -->
           <div class="param-control-group">
             <div class="param-header">
-              <div class="param-label-box has-tooltip" data-tooltip="Positive values penalize tokens based on whether they appear in the text so far, promoting topic shifts and conceptual breadth.">
+              <div class="param-label-box has-tooltip"
+                data-tooltip="Positive values penalize tokens based on whether they appear in the text so far, promoting topic shifts and conceptual breadth.">
                 <span class="param-label">Presence Penalty</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -2343,7 +2516,8 @@
           <div class="advanced-accordion">
             <button class="accordion-toggle" id="accordionToggleBtn">
               <span>Advanced Parameters</span>
-              <svg id="accordionChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg id="accordionChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
@@ -2483,10 +2657,13 @@
           </div>
         </div>
 
-        <div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
-          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">Groq LPU Acceleration Overview</div>
+        <div
+          style="background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">Groq LPU
+            Acceleration Overview</div>
           <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
-            NEXORA routes inference via the secure <code>/api/chat</code> Vercel serverless gateway directly to Groq's Language Processing Unit (LPU) architecture. Your secret API key is never exposed to the client browser.
+            NEXORA routes inference via the secure <code>/api/chat</code> Vercel serverless gateway directly to Groq's
+            Language Processing Unit (LPU) architecture. Your secret API key is never exposed to the client browser.
           </div>
         </div>
       </div>
@@ -2502,7 +2679,9 @@
         <div class="modal-title-box">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--antique-gold)" stroke-width="2">
             <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
           </svg>
           <span class="modal-title">Playground Preferences</span>
         </div>
@@ -2550,7 +2729,8 @@
         </div>
 
         <div style="padding-top: 10px; border-top: 1px solid var(--border-subtle);">
-          <button class="icon-action-btn" id="factoryResetBtn" style="color: var(--error-color); width: 100%; justify-content: center; padding: 10px; border-color: rgba(230,85,85,0.3);">
+          <button class="icon-action-btn" id="factoryResetBtn"
+            style="color: var(--error-color); width: 100%; justify-content: center; padding: 10px; border-color: rgba(230,85,85,0.3);">
             Reset All Preferences and Cache
           </button>
         </div>
@@ -3578,7 +3758,7 @@ This approach balances computational efficiency with operational clarity, matchi
         if (AppState.currentAbortController) {
           try {
             AppState.currentAbortController.abort();
-          } catch (e) {}
+          } catch (e) { }
         }
       });
 
@@ -3597,7 +3777,7 @@ This approach balances computational efficiency with operational clarity, matchi
             if (AppState.currentAbortController) {
               try {
                 AppState.currentAbortController.abort();
-              } catch (err) {}
+              } catch (err) { }
             }
           }
         }
@@ -3724,4 +3904,5 @@ This approach balances computational efficiency with operational clarity, matchi
     });
   </script>
 </body>
+
 </html>
