@@ -2003,10 +2003,10 @@
               <div class="model-select-wrapper">
                 <label for="modelSelect" style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Model:</label>
                 <select class="model-dropdown-select" id="modelSelect">
-                  <option value="nexora-titan-70b" selected>Nexora Titan-70B (Groq Llama 3.3 70B Versatile)</option>
-                  <option value="nexora-hermes-8b">Nexora Hermes-8B (Groq Llama 3.1 8B Instant)</option>
-                  <option value="nexora-quantum-moe">Nexora Quantum-MoE (Groq Mixtral 8x7B)</option>
-                  <option value="nexora-chronos-coder">Nexora Chronos-Coder (Groq Llama 3.3 70B Coder)</option>
+                  <option value="nexora-hermes-8b" selected>Nexora Hermes-8B (Groq Llama 3.1 8B Instant — Default)</option>
+                  <option value="nexora-titan-120b">Nexora Titan-120B (Groq GPT-OSS 120B)</option>
+                  <option value="nexora-quantum-20b">Nexora Quantum-20B (Groq GPT-OSS 20B)</option>
+                  <option value="nexora-chronos-27b">Nexora Chronos-27B (Groq Qwen 3.8 27B)</option>
                   <option value="nexora-aegis-guard">Nexora Aegis-Guard (Groq Llama Guard 3 8B)</option>
                 </select>
               </div>
@@ -2023,19 +2023,19 @@
             <div class="model-specs-grid" id="modelSpecsGrid">
               <div class="model-spec-pill">
                 <span class="spec-label">Architecture</span>
-                <span class="spec-val" id="specArchitecture">70B LPU Accelerated</span>
+                <span class="spec-val" id="specArchitecture">8B Ultra-Fast LPU</span>
               </div>
               <div class="model-spec-pill">
                 <span class="spec-label">Context Window</span>
-                <span class="spec-val" id="specContext">128,000 Tokens</span>
+                <span class="spec-val" id="specContext">131,072 Tokens</span>
               </div>
               <div class="model-spec-pill">
                 <span class="spec-label">Throughput Class</span>
-                <span class="spec-val" id="specSpeed">~280 Tokens/sec</span>
+                <span class="spec-val" id="specSpeed">~750 Tokens/sec</span>
               </div>
               <div class="model-spec-pill">
                 <span class="spec-label">Inference Engine</span>
-                <span class="spec-val" id="specInferenceMode" style="color: var(--antique-gold);">Groq LPU Cloud</span>
+                <span class="spec-val" id="specInferenceMode" style="color: var(--antique-gold);">Groq (llama-3.1-8b-instant)</span>
               </div>
             </div>
           </div>
@@ -2565,46 +2565,47 @@
   <script>
     // WHAT THIS DOES:
     // Initializes the global state, application data, model catalogue, and Groq model mapping.
+    // Verified against active Groq models (llama-3.1-8b-instant, openai/gpt-oss-120b, openai/gpt-oss-20b, qwen/qwen3.8-27b).
     const NEXORA_MODELS = {
-      "nexora-titan-70b": {
-        id: "nexora-titan-70b",
-        name: "Nexora Titan-70B",
-        groqModel: "llama-3.3-70b-versatile",
-        badge: "Llama 3.3 70B",
-        architecture: "70B LPU Accelerated",
-        context: "128,000 Tokens",
-        simSpeed: 280,
-        description: "Flagship reasoning engine powered by Llama 3.3 70B on Groq LPUs, calibrated for deep architectural synthesis, code, and structured analysis."
-      },
       "nexora-hermes-8b": {
         id: "nexora-hermes-8b",
         name: "Nexora Hermes-8B",
         groqModel: "llama-3.1-8b-instant",
         badge: "Llama 3.1 8B",
         architecture: "8B Ultra-Fast LPU",
-        context: "128,000 Tokens",
+        context: "131,072 Tokens",
         simSpeed: 750,
-        description: "Ultra-low latency model powered by Llama 3.1 8B Instant on Groq LPUs, delivering sub-second completions for rapid experimentation."
+        description: "Flagship low-latency model powered by Meta Llama 3.1 8B Instant on Groq LPUs. Fast, universally accessible across all Groq accounts, and recommended for fast, general-purpose playground experimentation."
       },
-      "nexora-quantum-moe": {
-        id: "nexora-quantum-moe",
-        name: "Nexora Quantum-MoE",
-        groqModel: "mixtral-8x7b-32768",
-        badge: "Mixtral 8x7B",
-        architecture: "Sparse MoE (8x7B)",
-        context: "32,768 Tokens",
-        simSpeed: 420,
-        description: "High-throughput sparse Mixture-of-Experts engine powered by Mixtral 8x7B on Groq Cloud, routing multi-domain queries efficiently."
+      "nexora-titan-120b": {
+        id: "nexora-titan-120b",
+        name: "Nexora Titan-120B",
+        groqModel: "openai/gpt-oss-120b",
+        badge: "GPT-OSS 120B",
+        architecture: "120B Heavy Reasoning",
+        context: "131,072 Tokens",
+        simSpeed: 500,
+        description: "High-capacity reasoning engine powered by OpenAI GPT-OSS 120B on Groq Cloud, calibrated for complex architectural decomposition, multi-step logic, and deep analysis."
       },
-      "nexora-chronos-coder": {
-        id: "nexora-chronos-coder",
-        name: "Nexora Chronos-Coder",
-        groqModel: "llama-3.3-70b-versatile",
-        badge: "Llama 3.3 Coder",
-        architecture: "70B Engineering Logic",
-        context: "128,000 Tokens",
-        simSpeed: 280,
-        description: "Specialized for full-stack engineering, algorithmic decomposition, debugging, and clean code refactoring via Groq."
+      "nexora-quantum-20b": {
+        id: "nexora-quantum-20b",
+        name: "Nexora Quantum-20B",
+        groqModel: "openai/gpt-oss-20b",
+        badge: "GPT-OSS 20B",
+        architecture: "20B High-Throughput",
+        context: "131,072 Tokens",
+        simSpeed: 1000,
+        description: "High-throughput model powered by OpenAI GPT-OSS 20B on Groq Cloud, operating at speeds up to 1,000 tokens/sec."
+      },
+      "nexora-chronos-27b": {
+        id: "nexora-chronos-27b",
+        name: "Nexora Chronos-27B",
+        groqModel: "qwen/qwen3.8-27b",
+        badge: "Qwen 3.8 27B",
+        architecture: "27B Full-Stack Logic",
+        context: "131,072 Tokens",
+        simSpeed: 450,
+        description: "Engineered for algorithmic decomposition, debugging, code refactoring, and structured reasoning via Alibaba Cloud Qwen on Groq."
       },
       "nexora-aegis-guard": {
         id: "nexora-aegis-guard",
@@ -2615,12 +2616,43 @@
         context: "8,192 Tokens",
         simSpeed: 600,
         description: "Security classification and content safety model powered by Llama Guard 3 on Groq LPUs for threat inspection and compliance."
+      },
+      // Backward compatibility aliases
+      "nexora-titan-70b": {
+        id: "nexora-titan-70b",
+        name: "Nexora Hermes-8B (Legacy 70B Alias)",
+        groqModel: "llama-3.1-8b-instant",
+        badge: "Llama 3.1 8B",
+        architecture: "8B Ultra-Fast LPU",
+        context: "131,072 Tokens",
+        simSpeed: 750,
+        description: "Automatically routed to Llama 3.1 8B Instant for verified reliability on Groq."
+      },
+      "nexora-chronos-coder": {
+        id: "nexora-chronos-coder",
+        name: "Nexora Chronos (Legacy Coder Alias)",
+        groqModel: "llama-3.1-8b-instant",
+        badge: "Llama 3.1 8B",
+        architecture: "8B Ultra-Fast LPU",
+        context: "131,072 Tokens",
+        simSpeed: 750,
+        description: "Automatically routed to Llama 3.1 8B Instant."
+      },
+      "nexora-quantum-moe": {
+        id: "nexora-quantum-moe",
+        name: "Nexora Quantum (Legacy MoE Alias)",
+        groqModel: "openai/gpt-oss-20b",
+        badge: "GPT-OSS 20B",
+        architecture: "20B High-Throughput",
+        context: "131,072 Tokens",
+        simSpeed: 1000,
+        description: "Automatically routed to GPT-OSS 20B."
       }
     };
 
     // Global Interactive State
     const AppState = {
-      currentModel: "nexora-titan-70b",
+      currentModel: "nexora-hermes-8b",
       executionMode: "groq", // "groq" | "simulation"
       isGenerating: false,
       abortRequested: false,
@@ -2695,15 +2727,15 @@
     // WHAT THIS DOES:
     // Synchronizes the model selection dropdown with specifications and visual badge details.
     function updateModelSpecs(modelId) {
-      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-titan-70b"];
-      AppState.currentModel = modelId;
+      const model = NEXORA_MODELS[modelId] || NEXORA_MODELS["nexora-hermes-8b"];
+      AppState.currentModel = model.id;
       $("specArchitecture").textContent = model.architecture;
       $("specContext").textContent = model.context;
       $("specSpeed").textContent = `~${model.simSpeed} Tokens/sec`;
       if ($("specInferenceMode")) {
         $("specInferenceMode").textContent = model.groqModel ? `Groq (${model.groqModel})` : "Groq LPU Cloud";
       }
-      $("modelSelect").value = modelId;
+      $("modelSelect").value = model.id;
     }
 
     // WHAT THIS DOES:
@@ -2713,7 +2745,17 @@
       if (!listContainer) return;
       listContainer.innerHTML = "";
 
-      Object.values(NEXORA_MODELS).forEach((model) => {
+      const activeModelIds = [
+        "nexora-hermes-8b",
+        "nexora-titan-120b",
+        "nexora-quantum-20b",
+        "nexora-chronos-27b",
+        "nexora-aegis-guard"
+      ];
+
+      activeModelIds.forEach((id) => {
+        const model = NEXORA_MODELS[id];
+        if (!model) return;
         const card = document.createElement("div");
         card.className = "model-spec-card";
         card.innerHTML = `

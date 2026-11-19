@@ -5,19 +5,32 @@
 
 // WHAT THIS DOES:
 // Maps NEXORA UI model identifiers to active production Groq model IDs.
+// Verified against official Groq documentation (console.groq.com/docs/models).
 const GROQ_MODEL_MAP = {
-  "nexora-titan-70b": "llama-3.3-70b-versatile",
+  // Primary Active Production Models
   "nexora-hermes-8b": "llama-3.1-8b-instant",
-  "nexora-quantum-moe": "mixtral-8x7b-32768",
-  "nexora-chronos-coder": "llama-3.3-70b-versatile",
+  "nexora-titan-120b": "openai/gpt-oss-120b",
+  "nexora-quantum-20b": "openai/gpt-oss-20b",
+  "nexora-chronos-27b": "qwen/qwen3.8-27b",
   "nexora-aegis-guard": "llama-guard-3-8b",
-  // Direct Groq Model IDs
-  "llama-3.3-70b-versatile": "llama-3.3-70b-versatile",
+
+  // Direct Groq Model IDs (passed directly through)
   "llama-3.1-8b-instant": "llama-3.1-8b-instant",
-  "mixtral-8x7b-32768": "mixtral-8x7b-32768",
-  "gemma2-9b-it": "gemma2-9b-it",
-  "deepseek-r1-distill-llama-70b": "deepseek-r1-distill-llama-70b"
+  "openai/gpt-oss-120b": "openai/gpt-oss-120b",
+  "openai/gpt-oss-20b": "openai/gpt-oss-20b",
+  "qwen/qwen3.8-27b": "qwen/qwen3.8-27b",
+  "qwen/qwen3.6-27b": "qwen/qwen3.6-27b",
+  "llama-guard-3-8b": "llama-guard-3-8b",
+
+  // Legacy aliases gracefully mapped to supported production equivalents
+  "nexora-titan-70b": "llama-3.1-8b-instant",
+  "nexora-chronos-coder": "llama-3.1-8b-instant",
+  "nexora-quantum-moe": "openai/gpt-oss-20b"
 };
+
+// WHAT THIS DOES:
+// The verified, universally supported default Groq model for chat completion.
+const DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant";
 
 // WHAT THIS DOES:
 // Helper to safely parse incoming JSON request body from standard Node or Vercel HTTP requests.
@@ -69,6 +82,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
+      code: "METHOD_NOT_ALLOWED",
       error: "Method Not Allowed. Use HTTP POST to send inference requests to /api/chat."
     });
   }
@@ -92,6 +106,7 @@ module.exports = async function handler(req, res) {
   if (!body) {
     return res.status(400).json({
       success: false,
+      code: "INVALID_JSON",
       error: "Invalid JSON payload in request body."
     });
   }
@@ -99,7 +114,7 @@ module.exports = async function handler(req, res) {
   const {
     systemPrompt = "",
     userPrompt = "",
-    model = "nexora-titan-70b",
+    model = "",
     temperature = 0.7,
     maxTokens = 1024,
     topP = 0.9,
@@ -111,13 +126,21 @@ module.exports = async function handler(req, res) {
   if (!userPrompt || userPrompt.trim() === "") {
     return res.status(400).json({
       success: false,
+      code: "EMPTY_PROMPT",
       error: "The 'userPrompt' field cannot be empty."
     });
   }
 
   // WHAT THIS DOES:
-  // Resolves the requested model to a supported Groq Cloud model.
-  const resolvedModel = GROQ_MODEL_MAP[model] || "llama-3.3-70b-versatile";
+  // Resolves the requested model without silently overriding valid direct model IDs.
+  // If model is a NEXORA alias in GROQ_MODEL_MAP, resolve it.
+  // If model is a custom/direct string, pass it directly to Groq.
+  // If model is empty or unspecified, fall back to DEFAULT_GROQ_MODEL.
+  let resolvedModel = DEFAULT_GROQ_MODEL;
+  if (model && typeof model === "string" && model.trim()) {
+    const trimmed = model.trim();
+    resolvedModel = GROQ_MODEL_MAP[trimmed] || trimmed;
+  }
 
   // WHAT THIS DOES:
   // Constructs the OpenAI-compatible message payload for Groq.
@@ -173,23 +196,32 @@ module.exports = async function handler(req, res) {
     const responseData = await groqResponse.json().catch(() => null);
 
     // WHAT THIS DOES:
-    // Handles API error responses from Groq (e.g., 401 invalid key, 429 rate limit, 400 bad params).
+    // Handles API error responses from Groq (e.g., 404 model not found, 401 invalid key, 429 rate limit).
     if (!groqResponse.ok) {
-      const errorMessage =
+      const rawErrorMessage =
         responseData?.error?.message ||
         `Groq API responded with status ${groqResponse.status} (${groqResponse.statusText}).`;
 
-      let errorNotice = errorMessage;
-      if (groqResponse.status === 401) {
-        errorNotice = "Invalid Groq API Key. Please verify that your GROQ_API_KEY in .env.local is active and has appropriate permissions.";
+      let errorNotice = rawErrorMessage;
+      let errorCode = `GROQ_HTTP_${groqResponse.status}`;
+
+      if (groqResponse.status === 404) {
+        errorCode = "GROQ_MODEL_NOT_FOUND";
+        errorNotice = `The model '${resolvedModel}' does not exist or is not accessible on your Groq account. Please select an active model such as 'llama-3.1-8b-instant' or 'openai/gpt-oss-20b'.`;
+      } else if (groqResponse.status === 401) {
+        errorCode = "INVALID_API_KEY";
+        errorNotice = "Invalid Groq API Key. Please verify that your GROQ_API_KEY in .env.local (or Vercel Environment Variables) is active and has appropriate permissions.";
       } else if (groqResponse.status === 429) {
-        errorNotice = "Groq Rate Limit Exceeded. Please pause briefly or consider requesting higher rate tier.";
-      } else if (groqResponse.status === 400 && errorMessage.includes("context_length_exceeded")) {
+        errorCode = "RATE_LIMIT_EXCEEDED";
+        errorNotice = "Groq Rate Limit Exceeded. You have exceeded your current rate limit or token quota. Please pause briefly or switch to a lighter model like 'llama-3.1-8b-instant'.";
+      } else if (groqResponse.status === 400 && rawErrorMessage.includes("context_length_exceeded")) {
+        errorCode = "CONTEXT_LENGTH_EXCEEDED";
         errorNotice = "Context length exceeded. Please reduce max tokens or prompt length.";
       }
 
       return res.status(groqResponse.status).json({
         success: false,
+        code: errorCode,
         error: errorNotice,
         status: groqResponse.status,
         model: resolvedModel
@@ -226,6 +258,7 @@ module.exports = async function handler(req, res) {
     // Catches network/connection errors when contacting the Groq server.
     return res.status(502).json({
       success: false,
+      code: "NETWORK_ERROR",
       error: `Failed to communicate with Groq Cloud API: ${networkError.message}. Check network connectivity.`
     });
   }
